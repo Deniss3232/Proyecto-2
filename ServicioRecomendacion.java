@@ -1,6 +1,11 @@
 public class ServicioRecomendacion {
-    private ConexionNeo4j conexion;
+    private final RepositorioVehiculo repositorio; // Almacena el repositorio
 
-    public List<Vehiculo> recomendarVehiculos(Usuario usuario);
-    public List<Vehiculo> buscarPorEstiloDeVida(Usuario usuario);
+    public ServicioRecomendacion(RepositorioVehiculo repo) {
+        this.repositorio = repo; // Constructor
+    }
+
+    public Vehiculo recomendarVehiculo(Usuario usuario) {
+        return repositorio.recomendarPorEstilo(usuario.getEstiloDeVida()); // Recomendación basada en estilo
+    }
 }
