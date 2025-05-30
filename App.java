@@ -24,9 +24,21 @@ public class App {
             case 3 -> "familiar";
             default -> "urbano";
         };
-        // Crear usuario de prueba
-        // Conectar a Neo4j
-        // Llamar al ServicioRecomendacion
-        // Imprimir resultados
+        
+        Usuario usuario = new Usuario(nombre, estilo); // Crear objeto Usuario
+
+        RepositorioVehiculo repo = new RepositorioVehiculo(conexion); // Crear repositorio con Neo4j
+        ServicioRecomendacion servicio = new ServicioRecomendacion(repo); // Crear servicio de recomendación
+
+        Vehiculo recomendado = servicio.recomendarVehiculo(usuario); // Obtener recomendación
+
+        if (recomendado != null) {
+            System.out.println("\nVehículo recomendado para ti, " + usuario.getNombre() + ":");
+            System.out.println(recomendado.getFichaTecnica()); // Mostrar ficha técnica
+        } else {
+            System.out.println("Lo sentimos, no encontramos una recomendación para tu estilo de vida.");
+        }
+
+        conexion.cerrar(); // Cerrar conexión a Neo4j
     }
 }
