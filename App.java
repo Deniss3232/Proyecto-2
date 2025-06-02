@@ -1,44 +1,49 @@
+import java.util.Scanner;
+import java.util.List;
+import java.util.UUID;
+
 public class App {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in); // Para leer entrada del usuario
+        ConexionNeo4j conexion = new ConexionNeo4j("bolt://localhost:7687", "neo4j", "password");
+        RepositorioVehiculo repo = new RepositorioVehiculo(conexion);
+        ServicioRecomendacion servicio = new ServicioRecomendacion(conexion);
 
-        // Conexión a Neo4j — CAMBIA estos datos según tu configuración
-        ConexionNeo4j conexion = new ConexionNeo4j("bolt://localhost:7687", "neo4j", "admin");
+        // Limpiar base de datos antes de insertar
+        repo.limpiarVehiculos();
 
-        System.out.println("Bienvenido al recomendador de vehículos.");
-        System.out.print("¿Cuál es tu nombre?: ");
-        String nombre = sc.nextLine(); // Leer nombre del usuario
+        // Vehículos simulados
+        Vehiculo v1 = new Vehiculo(UUID.randomUUID().toString(), "Toyota", "Hilux", "pickup", 2022, 12.0, "campo");
+        Vehiculo v2 = new Vehiculo(UUID.randomUUID().toString(), "Kia", "Rio", "sedan", 2021, 18.0, "ciudad");
+        Vehiculo v3 = new Vehiculo(UUID.randomUUID().toString(), "Subaru", "Forester", "SUV", 2023, 14.0, "mixto");
 
-        // Menú de opciones
-        System.out.println("Selecciona tu estilo de vida:");
-        System.out.println("1. Urbano");
-        System.out.println("2. Todo Terreno");
-        System.out.println("3. Familiar");
-        System.out.print("Ingresa el número de tu elección: ");
-        int opcion = sc.nextInt(); // Leer opción
+        repo.guardarVehiculo(v1);
+        repo.guardarVehiculo(v2);
+        repo.guardarVehiculo(v3);
 
-        // Determinar estilo según la elección
-        String estilo = switch (opcion) {
-            case 1 -> "urbano";
-            case 2 -> "todoTerreno";
-            case 3 -> "familiar";
-            default -> "urbano";
-        };
-        
-        Usuario usuario = new Usuario(nombre, estilo); // Crear objeto Usuario
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("=== SISTEMA DE RECOMENDACIÓN DE VEHÍCULOS ===");
+        System.out.print("Ingrese su nombre: ");
+        String nombre = scanner.nextLine();
 
-        RepositorioVehiculo repo = new RepositorioVehiculo(conexion); // Crear repositorio con Neo4j
-        ServicioRecomendacion servicio = new ServicioRecomendacion(repo); // Crear servicio de recomendación
+        System.out.print("¿Dónde usará el vehículo? (ciudad / campo / mixto): ");
+        String uso = scanner.nextLine().toLowerCase().trim();
 
-        Vehiculo recomendado = servicio.recomendarVehiculo(usuario); // Obtener recomendación
+        System.out.print("¿Qué tipo de vehículo prefiere? (sedan / SUV / pickup): ");
+        String tipo = scanner.nextLine().toLowerCase().trim();
 
-        if (recomendado != null) {
-            System.out.println("\nVehículo recomendado para ti, " + usuario.getNombre() + ":");
-            System.out.println(recomendado.getFichaTecnica()); // Mostrar ficha técnica
+        Usuario usuario = new Usuario(nombre, uso, tipo);
+        List<Vehiculo> recomendados = servicio.recomendarVehiculos(usuario);
+
+        System.out.println("\n🚗 Recomendaciones para " + nombre + ":");
+        if (recomendados.isEmpty()) {
+            System.out.println("No se encontraron vehículos que coincidan con sus preferencias.");
         } else {
-            System.out.println("Lo sentimos, no encontramos una recomendación para tu estilo de vida.");
+            for (Vehiculo v : recomendados) {
+                System.out.println("- " + v);
+            }
         }
 
-        conexion.cerrar(); // Cerrar conexión a Neo4j
+        conexion.cerrar();
+        scanner.close();
     }
 }
