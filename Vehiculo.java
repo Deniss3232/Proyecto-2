@@ -1,49 +1,32 @@
 public class Vehiculo {
-    private String nombre;
-    private String tipo; // Ej: "SUV", "sedán", "pickup"
-    private String descripcion;
-    private String estiloIdeal;
+    private String id;
+    private String marca;
+    private String modelo;
+    private String tipo;
+    private int anio;
+    private double consumo;
+    private String uso;
 
-    // Constructor
-    public Vehiculo(String nombre, String tipo, String descripcion, String estiloIdeal) {
-        this.nombre = nombre;
+    public Vehiculo(String id, String marca, String modelo, String tipo, int anio, double consumo, String uso) {
+        this.id = id;
+        this.marca = marca;
+        this.modelo = modelo;
         this.tipo = tipo;
-        this.descripcion = descripcion;
-        this.estiloIdeal = estiloIdeal;
+        this.anio = anio;
+        this.consumo = consumo;
+        this.uso = uso;
     }
 
-    // Getters
-    public String getNombre() {
-        return nombre;
-    }
+    public String getId() { return id; }
+    public String getMarca() { return marca; }
+    public String getModelo() { return modelo; }
+    public String getTipo() { return tipo; }
+    public int getAnio() { return anio; }
+    public double getConsumo() { return consumo; }
+    public String getUso() { return uso; }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public String getEstiloIdeal() {
-        return estiloIdeal;
-    }
-
-    // Muestra ficha técnica formateada
-    public String getFichaTecnica() {
-        return "Nombre: " + nombre +
-               "\nTipo: " + tipo +
-               "\nEstilo ideal: " + estiloIdeal +
-               "\nDescripción: " + descripcion;
-    }
-
-    // Método extra: verificar si es apto para cierto estilo
-    public boolean esAptoPara(String estilo) {
-        return estiloIdeal.equalsIgnoreCase(estilo);
-    }
-
-    // Método para mostrar datos directamente
-    public void imprimirFicha() {
-        System.out.println(getFichaTecnica());
+    @Override
+    public String toString() {
+        return marca + " " + modelo + " (" + anio + ") - Tipo: " + tipo + ", Consumo: " + consumo + " km/L, Uso: " + uso;
     }
 }
