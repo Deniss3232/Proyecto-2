@@ -1,39 +1,15 @@
 public class Usuario {
     private String nombre;
-    private String estiloDeVida; // Ej: "urbano", "todoTerreno", "familiar"
+    private String preferenciaUso;
+    private String tipoPreferido;
 
-    // Constructor
-    public Usuario(String nombre, String estiloDeVida) {
+    public Usuario(String nombre, String preferenciaUso, String tipoPreferido) {
         this.nombre = nombre;
-        this.estiloDeVida = estiloDeVida;
+        this.preferenciaUso = preferenciaUso;
+        this.tipoPreferido = tipoPreferido;
     }
 
-    // Getters
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getEstiloDeVida() {
-        return estiloDeVida;
-    }
-
-    // Setters
-    public void setEstiloDeVida(String estiloDeVida) {
-        this.estiloDeVida = estiloDeVida;
-    }
-
-    // Método útil para mostrar información del usuario
-    public void mostrarResumen() {
-        System.out.println("Usuario: " + nombre);
-        System.out.println("Estilo de vida: " + estiloDeVida);
-    }
-
-    // Método ejemplo para cambiar estilo con validación
-    public boolean actualizarEstilo(String nuevoEstilo) {
-        if (nuevoEstilo != null && !nuevoEstilo.isEmpty()) {
-            this.estiloDeVida = nuevoEstilo;
-            return true;
-        }
-        return false;
-    }
+    public String getNombre() { return nombre; }
+    public String getPreferenciaUso() { return preferenciaUso; }
+    public String getTipoPreferido() { return tipoPreferido; }
 }
